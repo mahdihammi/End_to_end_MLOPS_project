@@ -4,6 +4,15 @@ from mlProject.entity.config_entity import DataIngestionConfig
 from mlProject.entity.config_entity import DataValidationConfig
 from mlProject.entity.config_entity import DataTransformationConfig
 from mlProject.entity.config_entity import ModelTrainerConfig
+from mlProject.entity.config_entity import ModelEvaluationConfig
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+os.environ["MLFLOW_TRACKING_URI"]="https://dagshub.com/mahdihammi12/End_to_end_MLOPS_project.mlflow"
+os.environ["MLFLOW_TRACKING_USERNAME"]= os.getenv('MLFLOW_TRACKING_USERNAME')
+os.environ["MLFLOW_TRACKING_PASSWORD"]= os.getenv('MLFLOW_TRACKING_PASSWORD')
 
 class ConfigurationManager:
     def __init__(
@@ -79,3 +88,24 @@ class ConfigurationManager:
         )
 
         return model_trainer_config
+    
+    
+    def get_model_evaluation_config(self) -> ModelEvaluationConfig:
+        config = self.config.model_evaluation
+        params = self.params.ElasticNet
+        schema =  self.schema.TARGET_COLUMN
+
+        create_directories([config.root_dir])
+
+        model_evaluation_config = ModelEvaluationConfig(
+            root_dir=config.root_dir,
+            test_data_path=config.test_data_path,
+            model_path = config.model_path,
+            all_params=params,
+            metric_file_name = config.metric_file_name,
+            target_column = schema.name,
+            mlflow_uri="https://dagshub.com/mahdihammi12/End_to_end_MLOPS_project.mlflow",
+           
+        )
+
+        return model_evaluation_config

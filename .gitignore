@@ -2,3 +2,6 @@ mlproj/
 
 artifacts/*
 
+mlruns/
+
+.env
